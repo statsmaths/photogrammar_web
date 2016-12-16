@@ -14,17 +14,17 @@ rect.parent{pointer-events:all;cursor:pointer;}
 .children:hover rect.child,.grandparent:hover rect{fill:#aaa;}
 .textdiv{line-height:normal;font-weight:700;font-family:Helvetica, Arial, sans-serif;cursor:pointer;padding:5px;}
 <![if !IE]>
-		text.hideifIE {display:none;} 
+		text.hideifIE {display:none;}
 <![endif]>
 </style>
 <div class="container" style="padding-top:50px">
 <h2>Treemap Visualization of 1942 Classification System</h2>
 <div id="chart" >
 
-<script src="http://d3js.org/d3.v2.min.js" charset="utf-8"></script>
-<script src="http://code.jquery.com/jquery-1.7.1.js"></script>
+<script src="https://d3js.org/d3.v2.min.js" charset="utf-8"></script>
+<script src="https://code.jquery.com/jquery-1.7.1.js"></script>
 <script>
-	
+
 
 
 	var margin = {top: 20, right: 0, bottom: 0, left: 0},
@@ -69,7 +69,7 @@ rect.parent{pointer-events:all;cursor:pointer;}
 		.attr("y", -margin.top)
 		.attr("width", width)
 		.attr("height", 20);
-		
+
 	grandparent.append("text")
 		.attr("x", 6)
 		.attr("y", 2 - margin.top)
@@ -130,14 +130,14 @@ rect.parent{pointer-events:all;cursor:pointer;}
 
 			var g1 = svg.insert("g", ".grandparent")
 				.datum(d)
-						
+
 				.attr("class", "depth");
 
 			/* add in data */
 			var g = g1.selectAll("g")
 				.data(d.children)
 				.enter().append("g");
-				
+
 
 
 			/* transition on child click */
@@ -151,26 +151,26 @@ rect.parent{pointer-events:all;cursor:pointer;}
 				.enter().append("rect")
 				   .attr("class", "child")
 				   .call(rect)
-				   
+
 				   .append("title")
 				   .text(function(d) { return d.name + ": " + formatNumber(d.size) + " photos"; }).attr("fill","black");
-				   
+
 
 			/* write parent rectangle */
 			g.append("rect")
-			
+
 				.attr("class", "parent")
 				.call(rect)
 				/* open new window based on the json's URL value for leaf nodes */
 				/* Chrome displays this on top */
-				.on("click", function(d) { 
+				.on("click", function(d) {
 					if(!d.children){
-						window.open(d.url); 
+						window.open(d.url);
 					}
 				})
 				.append("title")
 				.text(function(d) { return d.name + ": " + formatNumber(d.size) + " photos"; }); /*should be d.value*/
-				
+
 
 			/*
 			g.append("text")
@@ -180,23 +180,23 @@ rect.parent{pointer-events:all;cursor:pointer;}
 			.attr("dy", ".75em")
 			.text(function(d) { return d.name + ": " + formatNumber(d.size); });
 */
-			
-			
+
+
 				/* Adding a foreign object instead of a text object, allows for text wrapping */
 
 			g.append("foreignObject")
 				.call(rect)
 				/* open new window based on the json's URL value for leaf nodes */
 				/* Firefox displays this on top */
-				.on("click", function(d) { 
+				.on("click", function(d) {
 					if(!d.children){
-						window.open(d.url); 
+						window.open(d.url);
 				}
 			})
 				.attr("class","foreignobj")
-				.append("xhtml:div") 
+				.append("xhtml:div")
 				.attr("dy", ".75em")
-				.html(function(d) { return  "<span style=\"color:black;\">" + d.name + " " + formatNumber(d.size) +"</span>"; 
+				.html(function(d) { return  "<span style=\"color:black;\">" + d.name + " " + formatNumber(d.size) +"</span>";
 				})
 				.attr("style","font-size:12px;")
 				.attr("class","textdiv"); //textdiv class allows us to style the text easily with CSS
@@ -233,7 +233,7 @@ rect.parent{pointer-events:all;cursor:pointer;}
 				t1.selectAll(".textdiv").style("display", "none"); /* added */
 				t1.selectAll(".foreignobj").call(foreign); /* added */
 				t2.selectAll(".textdiv").style("display", "block"); /* added */
-				t2.selectAll(".foreignobj").call(foreign); /* added */ 
+				t2.selectAll(".foreignobj").call(foreign); /* added */
 
 				// Remove the old node when the transition is finished.
 				t1.remove().each("end", function() {
@@ -249,7 +249,7 @@ rect.parent{pointer-events:all;cursor:pointer;}
 		function text(text) {
 			text.attr("x", function(d) { return x(d.x) + 6; })
 			.attr("y", function(d) { return y(d.y) + 6; });
-			
+
 		}
 
 
@@ -262,7 +262,7 @@ rect.parent{pointer-events:all;cursor:pointer;}
 
 			.attr("fill", function(d) { return d.parent ? color(d.name) : null; })
 
-			
+
 		}
 
 		function foreign(foreign){ /* added */

@@ -1,7 +1,7 @@
 <?php $page = labs; ?>
 <?php include '../../../header.php'; ?>
 
-	    <link rel="stylesheet" type="text/css" href="css/dc.css"/>	
+	    <link rel="stylesheet" type="text/css" href="css/dc.css"/>
 <style type="text/css">
 /* .dots {border:1px dotted red;} */
 
@@ -24,8 +24,8 @@ table#data-table-sm {
 .table-hover > tbody > tr:hover > td,
 .table-hover > tbody > tr:hover > th {
 background-color: black;
-}	
-</style>		
+}
+</style>
 <div class="container" style="padding-top:50px">
 
 
@@ -42,13 +42,13 @@ background-color: black;
 
 
     <div class="row">
-           
+
 
         <div id="datatable" class="col-xs-2 dots">
 
-			<table class="table table-hover"  id="data-table-sm"> 
+			<table class="table table-hover"  id="data-table-sm">
 
-	        
+
 	     			</table>
         </div>
         <div class="col-xs-4 dots">
@@ -89,7 +89,7 @@ background-color: black;
 
     </div> <!-- /container -->
 </div>
-<script src="http://code.jquery.com/jquery-1.7.1.js"></script>
+<script src="https://code.jquery.com/jquery-1.7.1.js"></script>
 <script type="text/javascript" src="d3.js"></script>
 <script type="text/javascript" src="crossfilter.js"></script>
 <script type="text/javascript" src="js/dc.js"></script>
@@ -108,7 +108,7 @@ background-color: black;
 			d.year = +d.year;
 			d.id = d.cnumber;
 	    });
-	
+
 	var photoCountChart = dc.barChart("#photo-count-chart");
 	var photographerChart = dc.pieChart("#photographer-chart");
 	var stateChart = dc.geoChoroplethChart("#state-chart");
@@ -118,13 +118,13 @@ background-color: black;
     var dateDimension = ndx.dimension(function (d) {return d.dd;});
     var dateDimensionGroup = dateDimension.group();
     var vanCount = ndx.dimension(function (d) { return d.van0; });
-    var vanCountGroup = vanCount.group(); 
+    var vanCountGroup = vanCount.group();
 	var photoCount = ndx.dimension(function (d) {return d.dd;});
 	var photoCountGroup = photoCount.group();
 	var photographerCount = ndx.dimension(function (d) {return d.pname;});
 	var photographerCountGroup = photographerCount.group();
 	var dataTablesm = dc.dataTable("#data-table-sm");
- 
+
 
 	vanChart.width(260)
     .height(300)
@@ -136,9 +136,9 @@ background-color: black;
 	.label(function (d) {return d.key; })
     .title(function(d){return d.value;})
     .elasticX(true)
-    .xAxis().ticks(4);            
+    .xAxis().ticks(4);
 
- 
+
     photoCountChart.width(540).height(240)
     .margins({top: 10, right: 20, bottom: 40, left: 40})
     .dimension(photoCount)
@@ -148,11 +148,11 @@ background-color: black;
     .renderHorizontalGridLines(true)
     .elasticY(true)
     .brushOn(true);
-   
+
     photographerChart.slicesCap(6).radius(120).height(250)
     .dimension(photographerCount).minAngleForLabel(0.2).colors( d3.scale.category10())
-    .group(photographerCountGroup).ordering(function(d) {return d.value});           
- 
+    .group(photographerCountGroup).ordering(function(d) {return d.value});
+
 	dataTablesm
     .dimension(dateDimension)
 	.group(function(d) { return ""
@@ -171,16 +171,16 @@ background-color: black;
 
 
 var mapWidth = 350;
-var mapHeight = 550;	 	 
-var projection = d3.geo.albers() 
-      .translate([(mapWidth/2), (mapHeight/2)]) 
-      .scale(2800) 
-      .rotate([112.5, -0.8, -10]) 
-      .center([1.1, 37]); 
+var mapHeight = 550;
+var projection = d3.geo.albers()
+      .translate([(mapWidth/2), (mapHeight/2)])
+      .scale(2800)
+      .rotate([112.5, -0.8, -10])
+      .center([1.1, 37]);
 
-	
+
 	statesJson.features.forEach(function(d) { countyNames[d.properties.ICPSRFIP] = d.properties.NHGISNAM } );
-	
+
 	stateChart.width(mapWidth).height(mapHeight)
 	.projection(projection)
 	.dimension(stateCount)
@@ -191,31 +191,31 @@ var projection = d3.geo.albers()
 	.overlayGeoJson(statesJson.features, "state", function (d) {return String(d.properties.ICPSRFIP);})
 	.title(function (d) { return countyNames[d.key] + ": " + numberFormat(d.value ? d.value : 0) + " photographs";})
 	;
-	
-         
- 
+
+
+
         dc.renderAll();
-        
-		
+
+
        		stateChart.selectAll('path').on("mouseover", function(d) {
 		   		$("span#countyname").text(d.properties.NHGISNAM);
-		   		});   
+		   		});
 		   	stateChart.selectAll('path').on("mouseout", function(d) {
 		   		$("span#countyname").text('');
-		   		});   
+		   		});
 		});
-		
+
 		countyLines = function() {
 			stateChart.selectAll('path').on("mouseover", function(d) {
 		   		$("span#countyname").text(d.properties.NHGISNAM);
-		   		});   
+		   		});
 		   	stateChart.selectAll('path').on("mouseout", function(d) {
 		   		$("span#countyname").text('');
-		   		});  
+		   		});
 		};
 
 
-        
+
     });
     });
 </script>
