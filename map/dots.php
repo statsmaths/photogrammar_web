@@ -101,7 +101,7 @@ var seaver1937 = L.tileLayer.wms("http://geodata.library.yale.edu:8080/geoserver
 });
 
 
-cartodb.createLayer(map, 'http://photogrammar.cartodb.com/api/v2/viz/f27ad3fe-3cd0-11e3-a206-27d6fd8aecf3/viz.json', {detectRetina: false})
+cartodb.createLayer(map, 'https://photogrammar.cartodb.com/api/v2/viz/f27ad3fe-3cd0-11e3-a206-27d6fd8aecf3/viz.json', {detectRetina: false})
 /* cartodb.createLayer(map, 'http://yale.cartodb.com/api/v2/viz/8ff44294-4362-11e4-8358-0e73339ffa50/viz.json', {detectRetina: false}) */
     .addTo(map)
     .on('done', function(layer) {
