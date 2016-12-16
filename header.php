@@ -46,7 +46,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
              </button>
-              <a class="navbar-brand" href="/"><img src="http://photogrammar.yale.edu/images/photogrammar-wordmark.jpg" alt="Yale Photogrammar" title="Yale Photogrammar" height="50" /></a>
+              <a class="navbar-brand" href="/"><img src="https://www.photogrammar.org/images/photogrammar-wordmark.jpg" alt="Yale Photogrammar" title="Yale Photogrammar" height="50" /></a>
             </div>
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
