@@ -51,15 +51,10 @@
             <div class="navbar-collapse collapse">
               <ul class="nav navbar-nav navbar-right">
                 <li class="<?php echo ($page == "home" ? "active" : "")?>"><a href="/">Home</a></li>
-                <li class="dropdown <?php echo ($page == "map" ? "active" : "")?>">
-                  <a href="#" class="dropdown-toggle <?php echo ($page == "about" ? "active" : "")?>" data-toggle="dropdown">Maps<b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                    <li><a href="/map/">Counties</a></li>
-                    <li><a href="/map/dots.php">Dots</a></li>
-                  </ul>
+                <li class="<?php echo ($page == "map" ? "active" : "")?>"><a href="/map">Maps</a></li>
                 <li class="<?php echo ($page == "search" ? "active" : "")?>"><a href="/search">Search</a></li>
-                <li class="<?php echo ($page == "search" ? "active" : "")?>"><a href="/about">About</a></li>
-                <li class="<?php echo ($page == "labs" ? "active" : "")?>"><a href="/labs">Labs</a></li>
+                <li class="<?php echo ($page == "explore" ? "active" : "")?>"><a href="/explore">Explore</a></li>
+                <li class="<?php echo ($page == "aboe" ? "active" : "")?>"><a href="/aboe">About</a></li>
               </ul>
             </div>
           </div>
