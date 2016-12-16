@@ -94,7 +94,7 @@ div.cartodb-popup div.cartodb-popup-content-wrapper { padding-right:210px;}
        function main() {
 
 var map = L.map('map').setView([39.8, -98.2], 5);
-mapboxUrl = 'http://{s}.tiles.mapbox.com/v3/mapbox.world-light/{z}/{x}/{y}.png';
+mapboxUrl = 'https://{s}.tiles.mapbox.com/v3/mapbox.world-light/{z}/{x}/{y}.png';
 mapbox = new L.TileLayer(mapboxUrl, {maxZoom: 18, attribution: null, detectRetina:true});
 map.addLayer(mapbox,true);
 
