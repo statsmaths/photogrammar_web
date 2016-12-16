@@ -2,11 +2,11 @@
 <?php include '../header.php'; ?>
 
 <link rel="stylesheet" href="/css/bootstrap-slider.css" />
-<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
+<link rel="stylesheet" href="/css/cartodb.css" />
 <!--[if lte IE 8]>
   <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
 <![endif]-->
-<script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
+<script src="/js/cartodb.js"></script>
 <script src="/js/bootstrap-slider.js"></script>
 <script src="/search/select2/select2.js"></script>
 
