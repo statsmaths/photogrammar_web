@@ -2,11 +2,11 @@
 <?php include '../header.php'; ?>
 
 <link rel="stylesheet" href="/css/bootstrap-slider.css" />
-<link rel="stylesheet" href="/css/cartodb.css" />
+<link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
 <!--[if lte IE 8]>
   <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
 <![endif]-->
-<script src="/js/cartodb.js"></script>
+<script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
 <script src="/js/bootstrap-slider.js"></script>
 <script src="/search/select2/select2.js"></script>
 
@@ -35,10 +35,10 @@ li.mapcontrols {font-weight: bold;margin-right:20px;}
 /* FIX for cosmetic bug in interaction between bootstrap and cartodb.js/Leaflet in popup box (broken right border) */
 
 div.cartodb-popup div.cartodb-popup-content-wrapper { padding-right:210px;}
-
+  
 /*   ul.dropdown-menu  { border:1px solid red; z-index: 9999} */
-
-
+  
+  
 </style>
 	<link href="/search/select2/select2.css" rel="stylesheet"/>
 <div class="navbar navbar-fixed-top navbar-inverse" style="top: 50px; background-color:#777777;color:#fff;z-index:1">
@@ -75,7 +75,7 @@ div.cartodb-popup div.cartodb-popup-content-wrapper { padding-right:210px;}
 
 <div id="map"></div>
      <script type="infowindow/html" id="infowindow_template">
-
+      
       <div class="cartodb-popup">
         <a href="#close" class="cartodb-popup-close-button close">x</a>
          <div class="cartodb-popup-content-wrapper">
@@ -92,28 +92,28 @@ div.cartodb-popup div.cartodb-popup-content-wrapper { padding-right:210px;}
 
  <script>
        function main() {
-
+       
 var map = L.map('map').setView([39.8, -98.2], 5);
-mapboxUrl = 'https://{s}.tiles.mapbox.com/v3/mapbox.world-light/{z}/{x}/{y}.png';
+mapboxUrl = 'http://{s}.tiles.mapbox.com/v3/mapbox.world-light/{z}/{x}/{y}.png';     
 mapbox = new L.TileLayer(mapboxUrl, {maxZoom: 18, attribution: null, detectRetina:true});
-map.addLayer(mapbox,true);
+map.addLayer(mapbox,true); 
 
 var seaver1937orig = L.tileLayer.wms("http://kartor.32by32.com:8080/geoserver/Photogrammar/wms",{
 	layers: 'Photogrammar:seaver1937geo',
 	format: 'image/png',
-	transparent: true,
-	attribution: '1937 Vico Motor Oil Map',
+	transparent: true,   
+	attribution: '1937 Vico Motor Oil Map', 
 	detectRetina: true,
-	opacity: 0.7
+	opacity: 0.7    
 });
 
 var seaver1937 = L.tileLayer.wms("http://geodata.library.yale.edu:8080/geoserver/Photogrammar/wms",{
 	layers: 'Photogrammar:seaver1937',
 	format: 'image/png',
-	transparent: true,
-	attribution: '1937 Vico Motor Oil Map',
+	transparent: true,   
+	attribution: '1937 Vico Motor Oil Map', 
 	detectRetina: true,
-	opacity: 0.7
+	opacity: 0.7    
 });
 
 
@@ -135,21 +135,21 @@ var seaver1937 = L.tileLayer.wms("http://geodata.library.yale.edu:8080/geoserver
 
 .on('done', function(layer) {
 	countysublayer = layer.getSubLayer(0);
-
+	       
 	countylayer = layer;
 	  countylayer.setZIndex(99);
 	map.addLayer(countylayer);
-
+	
 	countysublayer.infowindow.set('template', $('#infowindow_template').html());
 }).on('error', function() {
 	console.log("some error occurred");
-});
+}); 
 
 var vizLayers = {};
 var historicMaps = {'1937 Vico Motor Oil Map': seaver1937};
 map.addControl(new L.control.layers(vizLayers, historicMaps, {collapsed: false}));
 
-
+      
 };
 
 	$("select#pname").select2({
@@ -157,28 +157,32 @@ map.addControl(new L.control.layers(vizLayers, historicMaps, {collapsed: false})
 		allowClear: true,
 		width:250
 		});
-
+  
      var setDates = function() {
 
      	if (($('#thestartdate').text() != yearSlider.value[0] || $('#theenddate').text() != yearSlider.value[1])) {
 	     	var startDate = yearSlider.value[0];
 	     	var endDate = yearSlider.value[1];
-
+	     	
 	     	$('#thestartdate').html(startDate);
 	     	$('#theenddate').html(endDate);
 
-	     	var newQuery="SELECT us_2.icpsrfip,us_2.cartodb_id,us_2.nhgisnam,ST_SIMPLIFY(us_2.the_geom_webmercator,0.0001) as the_geom_webmercator,ST_ASGEOJSON(ST_SIMPLIFY(us_2.the_geom,0.0001)) as geometry,COUNT(*) as npics, (COUNT(*) / (us_2.shape_area/2990893727.30754)) as density,MAX(fsadata_2014.year) AS maxyear, MIN(fsadata_2014.year) AS minyear, fsadata_2014.state FROM us_2,fsadata_2014 WHERE us_2.icpsrfip = fsadata_2014.icpsrfip AND fsadata_2014.year >= " + startDate + " AND fsadata_2014.year <= " +  endDate;
 
+	     	var newQuery="SELECT us_2.icpsrfip,us_2.cartodb_id,us_2.nhgisnam,ST_SIMPLIFY(us_2.the_geom_webmercator,0.0001) as the_geom_webmercator,ST_ASGEOJSON(ST_SIMPLIFY(us_2.the_geom,0.0001)) as geometry,COUNT(*) as npics, (COUNT(*) / (us_2.shape_area/2990893727.30754)) as density,MAX(fsadata_2014.year) AS maxyear, MIN(fsadata_2014.year) AS minyear, fsadata_2014.state FROM us_2,fsadata_2014 WHERE us_2.icpsrfip = fsadata_2014.icpsrfip AND fsadata_2014.year >= " + startDate + " AND fsadata_2014.year <= " +  endDate;
+	     	
+
+	     	
+	     	
 	     	if ($("select#pname").val()!="") {
 		     	newQuery += " AND pname='" +$("select#pname").val() + "' ";
-
+		     	
 	     	};
 	     	newQuery +=" GROUP BY us_2.cartodb_id, fsadata_2014.state";
-	   		countysublayer.setSQL(newQuery);
+	   		countysublayer.setSQL(newQuery); 
 
    		};
      	};
-
+   
     var yearSlider = $('#yearslider').slider({
  		   tooltip: 'hide',
  		   	handle:'round',
@@ -193,21 +197,21 @@ map.addControl(new L.control.layers(vizLayers, historicMaps, {collapsed: false})
     function adjustsql(who) {
     var startDate = yearSlider.value[0];
     var endDate = yearSlider.value[1];
-    	if(! who){
+    	if(! who){ 
 
 	    	countysublayer.setSQL("SELECT us_2.icpsrfip,us_2.cartodb_id,us_2.nhgisnam,ST_SIMPLIFY(us_2.the_geom_webmercator,0.0001) as the_geom_webmercator,ST_ASGEOJSON(ST_SIMPLIFY(us_2.the_geom,0.0001)) as geometry,COUNT(*) as npics, (COUNT(*) / (us_2.shape_area/2990893727.30754)) as density,MAX(fsadata_2014.year) AS maxyear, MIN(fsadata_2014.year) AS minyear, fsadata_2014.state FROM us_2,fsadata_2014 WHERE us_2.icpsrfip = fsadata_2014.icpsrfip AND fsadata_2014.year  >= " + startDate + " AND fsadata_2014.year <= " +  endDate + " GROUP BY us_2.cartodb_id, fsadata_2014.state");
-
-
-
+	    	
+	    	
+	    	
     		};
 		if(who){
 
-		  countysublayer.setSQL("SELECT us_2.icpsrfip,us_2.cartodb_id,us_2.nhgisnam,ST_SIMPLIFY(us_2.the_geom_webmercator,0.0001) as the_geom_webmercator,ST_ASGEOJSON(ST_SIMPLIFY(us_2.the_geom,0.0001)) as geometry,COUNT(*) as npics, (COUNT(*) / (us_2.shape_area/2990893727.30754)) as density, MAX(fsadata_2014.year) AS maxyear, MIN(fsadata_2014.year) AS minyear, fsadata_2014.state FROM us_2,fsadata_2014 WHERE us_2.icpsrfip = fsadata_2014.icpsrfip  AND YEAR >= " + startDate + " AND YEAR <= " +  endDate + " AND pname='" + who + "'  GROUP BY us_2.cartodb_id, fsadata_2014.state");
+		  countysublayer.setSQL("SELECT us_2.icpsrfip,us_2.cartodb_id,us_2.nhgisnam,ST_SIMPLIFY(us_2.the_geom_webmercator,0.0001) as the_geom_webmercator,ST_ASGEOJSON(ST_SIMPLIFY(us_2.the_geom,0.0001)) as geometry,COUNT(*) as npics, (COUNT(*) / (us_2.shape_area/2990893727.30754)) as density, MAX(fsadata_2014.year) AS maxyear, MIN(fsadata_2014.year) AS minyear, fsadata_2014.state FROM us_2,fsadata_2014 WHERE us_2.icpsrfip = fsadata_2014.icpsrfip  AND YEAR >= " + startDate + " AND YEAR <= " +  endDate + " AND pname='" + who + "'  GROUP BY us_2.cartodb_id, fsadata_2014.state");   
 
-
-
-
-			};
+		  
+		  
+		  
+			}; 
 		};
 
 
@@ -215,9 +219,10 @@ map.addControl(new L.control.layers(vizLayers, historicMaps, {collapsed: false})
 
 
    window.onload = main;
-
-
+    
+        
  </script>
 
 
 <?php include '../footer.php'; ?>
+
