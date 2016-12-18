@@ -1,14 +1,15 @@
 <?php $page = map; ?>
 <?php include '../header.php'; ?>
+
 <link rel="stylesheet" href="/css/bootstrap-slider.css" />
 <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.css" />
 <!--[if lte IE 8]>
   <link rel="stylesheet" href="http://libs.cartocdn.com/cartodb.js/v3/themes/css/cartodb.ie.css" />
 <![endif]-->
 <script src="http://libs.cartocdn.com/cartodb.js/v3/cartodb.js"></script>
-<!-- <script type="text/javascript" src="/js/modernizr.js"></script> -->
 <script src="/js/bootstrap-slider.js"></script>
-	 <script src="/search/select2/select2.js"></script>
+<script src="/search/select2/select2.js"></script>
+
 <style>
 html, body, #map {
 	height: 100%;
@@ -35,7 +36,8 @@ li.mapcontrols {font-weight: bold;margin-right:20px;}
 
 div.cartodb-popup div.cartodb-popup-content-wrapper { padding-right:210px;}
   
-
+/*   ul.dropdown-menu  { border:1px solid red; z-index: 9999} */
+  
   
 </style>
 	<link href="/search/select2/select2.css" rel="stylesheet"/>
@@ -72,7 +74,21 @@ div.cartodb-popup div.cartodb-popup-content-wrapper { padding-right:210px;}
 
 
 <div id="map"></div>
+     <script type="infowindow/html" id="infowindow_template">
+      
+      <div class="cartodb-popup">
+        <a href="#close" class="cartodb-popup-close-button close">x</a>
+         <div class="cartodb-popup-content-wrapper">
+           <div class="cartodb-popup-content">
+                 {{content.data.nhgisnam}}, {{content.data.state}}<br/>
+             <a href="/search/results.php?start=0&search=&pname=&lot=&van=&state={{content.data.state}}&county={{content.data.nhgisnam}}&city=&year_start={{content.data.minyear}}&month_start=0&year_stop={{content.data.maxyear}}&month_stop=12" target="_blank">See {{content.data.npics}} Pictures</a>
 
+
+           </div>
+         </div>
+         <div class="cartodb-popup-tip-container"></div>
+      </div>
+    </script>
 
  <script>
        function main() {
@@ -100,23 +116,34 @@ var seaver1937 = L.tileLayer.wms("http://geodata.library.yale.edu:8080/geoserver
 	opacity: 0.7    
 });
 
- 
-cartodb.createLayer(map, 'http://photogrammar.cartodb.com/api/v2/viz/f27ad3fe-3cd0-11e3-a206-27d6fd8aecf3/viz.json', {detectRetina: false})
-/* cartodb.createLayer(map, 'http://yale.cartodb.com/api/v2/viz/8ff44294-4362-11e4-8358-0e73339ffa50/viz.json', {detectRetina: false}) */ 
-    .addTo(map)
-    .on('done', function(layer) {
-    	dotsublayer = layer.getSubLayer(0);
-
-        layer.setZIndex(99);
-      
-
-    /*        dotsublayer.infowindow.set('template', $('#infowindow_template').html()); */
-    })
-    .on('error', function(err) {
-      alert("some error occurred: " + err);
-    });
 
 
+
+
+/*         cartodb.createLayer(map, 'http://photogrammar.cartodb.com/api/v2/viz/3e1dddb0-e0f5-11e3-b991-0e230854a1cb/viz.json', {detectRetina: false}) */
+        cartodb.createLayer(map, 'https://yale.cartodb.com/u/photogrammar2/api/v2/viz/534b78ae-4361-11e4-843a-0e10bcd91c2b/viz.json', {detectRetina: false})
+         .addTo(map)
+         .on('done', function(layer) {
+           // get sublayer 0 and set the infowindow template
+           var sublayer = layer.getSubLayer(0);
+
+           sublayer.infowindow.set('template', $('#infowindow_template').html());
+          }).on('error', function() {
+            console.log("some error occurred");
+          })
+
+
+.on('done', function(layer) {
+	countysublayer = layer.getSubLayer(0);
+	       
+	countylayer = layer;
+	  countylayer.setZIndex(99);
+	map.addLayer(countylayer);
+	
+	countysublayer.infowindow.set('template', $('#infowindow_template').html());
+}).on('error', function() {
+	console.log("some error occurred");
+}); 
 
 var vizLayers = {};
 var historicMaps = {'1937 Vico Motor Oil Map': seaver1937};
@@ -139,14 +166,19 @@ map.addControl(new L.control.layers(vizLayers, historicMaps, {collapsed: false})
 	     	
 	     	$('#thestartdate').html(startDate);
 	     	$('#theenddate').html(endDate);
-		 	
-	     	var newQuery="SELECT * FROM fsadata_2014 WHERE YEAR >= " + startDate + " AND YEAR <= " +  endDate;
+
+
+	     	var newQuery="SELECT us_2.icpsrfip,us_2.cartodb_id,us_2.nhgisnam,ST_SIMPLIFY(us_2.the_geom_webmercator,0.0001) as the_geom_webmercator,ST_ASGEOJSON(ST_SIMPLIFY(us_2.the_geom,0.0001)) as geometry,COUNT(*) as npics, (COUNT(*) / (us_2.shape_area/2990893727.30754)) as density,MAX(fsadata_2014.year) AS maxyear, MIN(fsadata_2014.year) AS minyear, fsadata_2014.state FROM us_2,fsadata_2014 WHERE us_2.icpsrfip = fsadata_2014.icpsrfip AND fsadata_2014.year >= " + startDate + " AND fsadata_2014.year <= " +  endDate;
+	     	
+
+	     	
 	     	
 	     	if ($("select#pname").val()!="") {
-		     	newQuery += " AND pname='" +$("select#pname").val() + "'";	     	
+		     	newQuery += " AND pname='" +$("select#pname").val() + "' ";
+		     	
 	     	};
-
-	   		dotsublayer.setSQL(newQuery); 
+	     	newQuery +=" GROUP BY us_2.cartodb_id, fsadata_2014.state";
+	   		countysublayer.setSQL(newQuery); 
 
    		};
      	};
@@ -166,11 +198,19 @@ map.addControl(new L.control.layers(vizLayers, historicMaps, {collapsed: false})
     var startDate = yearSlider.value[0];
     var endDate = yearSlider.value[1];
     	if(! who){ 
-	    	dotsublayer.setSQL("SELECT * FROM fsadata_2014 WHERE YEAR >= " + startDate + " AND YEAR <= " +  endDate);
+
+	    	countysublayer.setSQL("SELECT us_2.icpsrfip,us_2.cartodb_id,us_2.nhgisnam,ST_SIMPLIFY(us_2.the_geom_webmercator,0.0001) as the_geom_webmercator,ST_ASGEOJSON(ST_SIMPLIFY(us_2.the_geom,0.0001)) as geometry,COUNT(*) as npics, (COUNT(*) / (us_2.shape_area/2990893727.30754)) as density,MAX(fsadata_2014.year) AS maxyear, MIN(fsadata_2014.year) AS minyear, fsadata_2014.state FROM us_2,fsadata_2014 WHERE us_2.icpsrfip = fsadata_2014.icpsrfip AND fsadata_2014.year  >= " + startDate + " AND fsadata_2014.year <= " +  endDate + " GROUP BY us_2.cartodb_id, fsadata_2014.state");
+	    	
+	    	
+	    	
     		};
 		if(who){
 
-		  dotsublayer.setSQL("SELECT * FROM fsadata_2014 WHERE YEAR >= " + startDate + " AND YEAR <= " +  endDate + " AND pname='" + who + "'");   
+		  countysublayer.setSQL("SELECT us_2.icpsrfip,us_2.cartodb_id,us_2.nhgisnam,ST_SIMPLIFY(us_2.the_geom_webmercator,0.0001) as the_geom_webmercator,ST_ASGEOJSON(ST_SIMPLIFY(us_2.the_geom,0.0001)) as geometry,COUNT(*) as npics, (COUNT(*) / (us_2.shape_area/2990893727.30754)) as density, MAX(fsadata_2014.year) AS maxyear, MIN(fsadata_2014.year) AS minyear, fsadata_2014.state FROM us_2,fsadata_2014 WHERE us_2.icpsrfip = fsadata_2014.icpsrfip  AND YEAR >= " + startDate + " AND YEAR <= " +  endDate + " AND pname='" + who + "'  GROUP BY us_2.cartodb_id, fsadata_2014.state");   
+
+		  
+		  
+		  
 			}; 
 		};
 
